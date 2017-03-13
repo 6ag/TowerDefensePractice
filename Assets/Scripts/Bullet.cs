@@ -18,6 +18,13 @@ public class Bullet : MonoBehaviour {
 
 	void Update() 
 	{
+		// 当目标到达终点，或者目标被杀死。则子弹销毁
+		if (target == null)
+		{
+			// 销毁子弹
+			Die();
+			return;
+		}
 		// 子弹指向攻击目标
 		transform.LookAt(target.position);
 		// 向攻击目标发射
@@ -32,13 +39,19 @@ public class Bullet : MonoBehaviour {
 		{
 			// 让敌人掉血
 			other.GetComponent<Enemy>().TakeDamage(damage);
-			// 爆炸效果
-			GameObject effect = GameObject.Instantiate(explosionEffectPrefab, transform.position, transform.rotation);
-			// 销毁特效
-			Destroy(effect, 1);
 			// 销毁子弹
-			Destroy(gameObject);
+			Die();
 		}
+	}
+
+	void Die()
+	{
+		// 爆炸效果
+		GameObject effect = GameObject.Instantiate(explosionEffectPrefab, transform.position, transform.rotation);
+		// 销毁特效
+		Destroy(effect, 1);
+		// 销毁子弹
+		Destroy(gameObject);
 	}
 
 }

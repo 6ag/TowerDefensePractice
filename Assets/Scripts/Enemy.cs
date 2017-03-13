@@ -5,7 +5,9 @@ using UnityEngine;
 // 一个Enemy就是一个敌人
 public class Enemy : MonoBehaviour {
 
+	public int hp = 150; // 敌人血量
 	public float speed = 10; // 移动速度
+	public GameObject explosionEffectPrefab; // 敌人死亡爆炸特效
 	private Transform[] positions; // 所有路径点
 	private int index = 0; // 当前正在像哪个点移动
 
@@ -57,7 +59,26 @@ public class Enemy : MonoBehaviour {
 	// 受到伤害
 	public void TakeDamage(int damage)
 	{
-		
+		if (hp <= 0)
+		{
+			return;
+		}
+		hp -= damage;
+		if (hp <= 0)
+		{
+			Die();
+		}
+	}
+
+	// 敌人死亡
+	void Die()
+	{
+		// 敌人死亡爆炸特效
+		GameObject effect = GameObject.Instantiate(explosionEffectPrefab, transform.position, transform.rotation);
+		// 延迟1.5秒销毁爆炸特效
+		Destroy(effect, 1.5f);
+		// 销毁敌人
+		Destroy(gameObject);
 	}
 
 }

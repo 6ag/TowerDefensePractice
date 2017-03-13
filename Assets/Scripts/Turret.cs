@@ -59,10 +59,44 @@ public class Turret : MonoBehaviour {
 	// 攻击敌人
 	void Attack()
 	{
-		// 实例化子弹，子弹位置和方向于炮塔枪口一致
-		GameObject bullet = GameObject.Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
-		// 给子弹设置攻击目标
-		bullet.GetComponent<Bullet>().SetTarget(enemies[0].transform);
+		// 如果目标已经被杀死或者已经到达终点，则移除集合
+		if (enemies[0] == null)
+		{
+			UpdateEnemys();
+		}
+		// 清理了空元素后，再次判断是否还有敌人能够被攻击
+		if (enemies.Count > 0)
+		{
+			// 实例化子弹，子弹位置和方向于炮塔枪口一致
+			GameObject bullet = GameObject.Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
+			// 给子弹设置攻击目标
+			bullet.GetComponent<Bullet>().SetTarget(enemies[0].transform);
+		}
+		else
+		{
+			// 可以攻击状态
+			timer = attackRateTime;
+		}
+		
+	}
+
+	// 更新敌人集合 - 移除已经被杀死或者到达终点的敌人
+	void UpdateEnemys()
+	{
+		// 存储所有为空的元素
+		List<int> emptyIndexList = new List<int>();
+		for (int i = 0; i < enemies.Count; i++)
+		{
+			if (enemies[i] == null)
+			{
+				emptyIndexList.Add(i);
+			}
+		}
+		// 移除空元素
+		for (int i = 0; i < emptyIndexList.Count; i++)
+		{
+			enemies.RemoveAt(emptyIndexList[i] - i);
+		}
 	}
 
 }
