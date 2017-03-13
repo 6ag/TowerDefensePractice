@@ -29,7 +29,7 @@ public class EnemySpawner : MonoBehaviour {
 				// 每一波最后一个敌人生成后无需暂停
 				if (i != wave.count - 1) 
 				{
-					// 每个敌人生成间隔 yield return new WaitForSeconds(wave.rate); 相当于暂停
+					// 每个敌人生成间隔
 					yield return new WaitForSeconds(wave.rate);
 				}
 			}
