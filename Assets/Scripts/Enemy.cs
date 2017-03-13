@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 一个Enemy就是一个敌人
 public class Enemy : MonoBehaviour {
 
+	private int totalHp; // 保存总血量，用于计算血条进度。因为hp会递减
 	public int hp = 150; // 敌人血量
+	public Slider hpSlider; // 血条
 	public float speed = 10; // 移动速度
 	public GameObject explosionEffectPrefab; // 敌人死亡爆炸特效
 	private Transform[] positions; // 所有路径点
@@ -13,6 +16,8 @@ public class Enemy : MonoBehaviour {
 
 	void Start() 
 	{
+		// 保存血量
+		totalHp = hp;
 		// 获取路径点数组
 		positions = Waypoints.positions;
 	}
@@ -63,7 +68,9 @@ public class Enemy : MonoBehaviour {
 		{
 			return;
 		}
+		// 血量减少，更新UI
 		hp -= damage;
+		hpSlider.value = (float)hp / totalHp;
 		if (hp <= 0)
 		{
 			Die();

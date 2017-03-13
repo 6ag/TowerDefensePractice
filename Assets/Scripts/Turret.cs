@@ -21,6 +21,14 @@ public class Turret : MonoBehaviour {
 
 	void Update()
 	{
+		// 炮塔对准敌人
+		if (enemies.Count > 0 && enemies[0] != null)
+		{
+			Vector3 targetPosition = enemies[0].transform.position;
+			// 让炮塔高度保持不变
+			targetPosition.y = head.position.y;
+			head.LookAt(targetPosition);
+		}
 		// 计时器递增
 		timer += Time.deltaTime;
 		// 有存在的地方，并且计时器大于攻击间隔就重置，并调用攻击方法
@@ -29,11 +37,6 @@ public class Turret : MonoBehaviour {
 			// 定时器清空
 			timer = 0;
 			Attack();
-		}
-
-		if (enemies.Count > 0)
-		{
-
 		}
 	}
 
