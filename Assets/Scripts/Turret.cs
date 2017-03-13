@@ -11,6 +11,7 @@ public class Turret : MonoBehaviour {
 	private float timer = 0; // 计时器
 	public GameObject bulletPrefab; // 子弹预制体
 	public Transform firePosition; // 炮塔发射口位置
+	public Transform head; // 炮塔头部
 	
 	void Start()
 	{
