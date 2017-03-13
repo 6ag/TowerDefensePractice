@@ -12,12 +12,14 @@ public class BuildManager : MonoBehaviour {
 	public TurretData standardTurretData; // 标准炮塔数据
 	private TurretData selectedTurretData; // 当前选择的炮塔数据，将要建造
 	public Text moneyText; // 显示金钱的文本
+	public Animator moneyAnimator; // 金钱动画状态机
 	private int money = 1000; // 金钱
-
-	// 金币发生变化
+	
+	// 金钱发生变化
 	void ChangeMoney(int change)
 	{
 		money += change;
+		// 修改金钱UI
 		moneyText.text = "¥ " + money;
 	}
 	
@@ -51,7 +53,7 @@ public class BuildManager : MonoBehaviour {
 						else 
 						{
 							// TODO钱不够，给一个提示
-
+							moneyAnimator.SetTrigger("Flicker");
 						}
 					}
 					else 

@@ -11,6 +11,7 @@ public class MapCube : MonoBehaviour {
 	// 构建炮塔
 	public void BuildTurret(GameObject turretPrefab) 
 	{
-		
+		// 实例化炮塔
+		turretGo = GameObject.Instantiate(turretPrefab, transform.position, Quaternion.identity);
 	}
 }
