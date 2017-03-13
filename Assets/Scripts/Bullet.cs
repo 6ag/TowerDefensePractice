@@ -33,7 +33,9 @@ public class Bullet : MonoBehaviour {
 			// 让敌人掉血
 			other.GetComponent<Enemy>().TakeDamage(damage);
 			// 爆炸效果
-			GameObject.Instantiate(explosionEffectPrefab, transform.position, transform.rotation);
+			GameObject effect = GameObject.Instantiate(explosionEffectPrefab, transform.position, transform.rotation);
+			// 销毁特效
+			Destroy(effect, 1);
 			// 销毁子弹
 			Destroy(gameObject);
 		}
