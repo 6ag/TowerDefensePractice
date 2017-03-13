@@ -40,7 +40,8 @@ public class BuildManager : MonoBehaviour {
 				{
 					// 获取到点击的Cube
 					MapCube mapCube = hit.collider.gameObject.GetComponent<MapCube>();
-					if (mapCube.turretGo == null)
+					// 已经选择了一个默认的炮塔类型，并且点击的位置的炮塔还没有创建
+					if (selectedTurretData != null && mapCube.turretGo == null)
 					{
 						// 如果点击的cube下没有炮塔，则可以创建
 						if (money > selectedTurretData.cost)
@@ -56,10 +57,10 @@ public class BuildManager : MonoBehaviour {
 							moneyAnimator.SetTrigger("Flicker");
 						}
 					}
-					else 
+					else if (mapCube.turretGo != null)
 					{
 						// TODO已经有了炮塔，判断是否需要升级 
-
+						
 					}
 				}
 			}
