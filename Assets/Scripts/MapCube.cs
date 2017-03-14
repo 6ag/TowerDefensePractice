@@ -8,9 +8,10 @@ public class MapCube : MonoBehaviour {
 
 	[HideInInspector] // [HideInInspector]可以隐藏这个public属性显示在inspector面板
 	public GameObject turretGo; // 当前cube下的炮塔，如果为空，则表示当前位置没有炮塔
+	[HideInInspector] // [HideInInspector]可以隐藏这个public属性显示在inspector面板
+	public bool isUpgraded = false; // 炮塔是否已经升级过
 	public GameObject buildEffect; // 构建炮塔的特效预制体
 	private Renderer cubeRenderer; // 渲染器
-
 	void Start()
 	{
 		cubeRenderer = GetComponent<Renderer>();
@@ -24,6 +25,8 @@ public class MapCube : MonoBehaviour {
 		// 构建炮塔的尘土特效
 		GameObject effect = GameObject.Instantiate(buildEffect, transform.position, Quaternion.identity);
 		Destroy(effect, 1);
+		// 每次构建炮塔都重置升级标识
+		isUpgraded = false;
 	}
 
 	void OnMouseEnter()

@@ -11,9 +11,12 @@ public class BuildManager : MonoBehaviour {
 	public TurretData missileTurretData; // 炮弹炮塔数据
 	public TurretData standardTurretData; // 标准炮塔数据
 	private TurretData selectedTurretData; // 当前选择的炮塔数据，将要建造
+	private GameObject selectedTurretGo; // 当前选择的炮塔，选择炮塔会显示或隐藏升级UI
 	public Text moneyText; // 显示金钱的文本
 	public Animator moneyAnimator; // 金钱动画状态机
 	private int money = 1000; // 金钱
+	public GameObject upgradeCanvas; // 升级炮塔的画布UI
+	public Button upgradeButton; // 升级按钮
 	
 	// 金钱发生变化
 	void ChangeMoney(int change)
@@ -59,14 +62,25 @@ public class BuildManager : MonoBehaviour {
 					}
 					else if (mapCube.turretGo != null)
 					{
-						// TODO已经有了炮塔，判断是否需要升级 
-						
+						if (mapCube.turretGo == selectedTurretGo && upgradeCanvas.activeInHierarchy)
+						{
+							// 选择的是同一个炮塔，并且炮塔上已经显示了升级UI
+							HideUpgradeUI();
+						}
+						else 
+						{
+							// 已经有了炮塔，传递炮塔位置和是否已经升级 
+							ShowUpgradeUI(mapCube.transform.position, mapCube.isUpgraded);
+						}
+						// 记录当前选择的炮塔
+						selectedTurretGo = mapCube.turretGo;
 					}
 				}
 			}
 		}
 	}
 
+	// 选择了激光炮塔
 	public void OnLaserSelected(bool isOn) 
 	{
 		if (isOn)
@@ -75,6 +89,7 @@ public class BuildManager : MonoBehaviour {
 		}
 	}
 
+	// 选择了炮弹炮塔
 	public void OnMissileSelected(bool isOn) 
 	{
 		if (isOn)
@@ -83,12 +98,43 @@ public class BuildManager : MonoBehaviour {
 		}
 	}
 
+	// 选择了标准炮塔
 	public void OnStandardSelected(bool isOn)
 	{
 		if (isOn)
 		{
 			selectedTurretData = standardTurretData;
 		}
+	}
+
+	// 显示炮塔升级UI
+	void ShowUpgradeUI(Vector3 position, bool isDisableUpgrade)
+	{
+		// 激活炮塔升级UI
+		upgradeCanvas.SetActive(true);
+		// upgradeCanvas全场就只有一个对象，每次显示的时候都给他设置位置。
+		upgradeCanvas.transform.position = position;
+		// 升级按钮是否禁用，如果已经升级或者钱不够就禁用
+		upgradeButton.interactable = !isDisableUpgrade;
+	}
+
+	// 隐藏炮塔升级UI
+	void HideUpgradeUI()
+	{
+		// 隐藏炮塔升级UI
+		upgradeCanvas.SetActive(false);
+	}
+
+	// 点击了升级按钮
+	public void OnUpgradeButtonDown()
+	{
+
+	}
+
+	// 点击了拆除按钮
+	public void OnDestroyButtonDown()
+	{
+
 	}
 
 }
