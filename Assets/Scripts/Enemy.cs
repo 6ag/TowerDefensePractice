@@ -52,6 +52,8 @@ public class Enemy : MonoBehaviour {
 	{
 		// 敌人到达目的地后，销毁当前游戏物体
 		GameObject.Destroy(gameObject);
+		// 游戏失败
+		GameManager.instance.Failed();
 	}
 
 	// 敌人销毁

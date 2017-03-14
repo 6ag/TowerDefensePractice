@@ -111,7 +111,7 @@ public class BuildManager : MonoBehaviour {
 	// 显示炮塔升级UI
 	void ShowUpgradeUI(Vector3 position, bool isDisableUpgrade)
 	{
-		// 停止上个隐藏动画
+		// 停止上个隐藏动画 - 不起作用
 		StopCoroutine(HideUpgradeUI());
 		// 每次激活都先禁用，这样动画才能正常显示
 		upgradeCanvas.SetActive(false);
@@ -138,7 +138,7 @@ public class BuildManager : MonoBehaviour {
 	public void OnUpgradeButtonDown()
 	{
 		// 如果点击的cube下没有炮塔，则可以创建
-		if (money >= selectedTurretData.costUpgraded)
+		if (money >= selectedMapCube.turretData.costUpgraded)
 		{
 			// 金钱数量变化
 			ChangeMoney(-selectedTurretData.costUpgraded);

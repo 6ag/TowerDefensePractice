@@ -9,10 +9,11 @@ public class EnemySpawner : MonoBehaviour {
 	public Transform START; // 生成敌人的位置
 	public float waveRate = 0.2f; // 上一波敌人死干净后重新生成一波敌人的时间间隔
 	public static int CountEnemyAlive = 0; // 存活的敌人数量
+	private Coroutine coroutine; // 协程
 
 	void Start()
 	{
-		StartCoroutine(SpawnEnemy());
+		coroutine = StartCoroutine(SpawnEnemy());
 	}
 
 	// 生成敌人
@@ -41,6 +42,19 @@ public class EnemySpawner : MonoBehaviour {
 			// 上一波敌人死干净后重新生成一波敌人的时间间隔
 			yield return new WaitForSeconds(waveRate);
 		}
+
+		while (CountEnemyAlive > 0)
+		{
+			yield return 0;
+		}
+		// 没有敌人存活，游戏胜利
+		GameManager.instance.Win();
+	}
+
+	// 停止生成敌人
+	public void Stop()
+	{
+		StopCoroutine(coroutine);
 	}
 
 }

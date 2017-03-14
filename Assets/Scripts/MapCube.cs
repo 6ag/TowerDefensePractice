@@ -12,7 +12,7 @@ public class MapCube : MonoBehaviour {
 	public bool isUpgraded = false; // 炮塔是否已经升级过
 	public GameObject buildEffect; // 构建炮塔的特效预制体
 	private Renderer cubeRenderer; // 渲染器
-	private TurretData turretData; // 当前cube下的炮塔数据
+	public TurretData turretData; // 当前cube下的炮塔数据
 
 	void Start()
 	{
