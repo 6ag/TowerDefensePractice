@@ -11,12 +11,13 @@ public class BuildManager : MonoBehaviour {
 	public TurretData missileTurretData; // 炮弹炮塔数据
 	public TurretData standardTurretData; // 标准炮塔数据
 	private TurretData selectedTurretData; // 当前选择的炮塔数据，将要建造
-	private GameObject selectedTurretGo; // 当前选择的炮塔，选择炮塔会显示或隐藏升级UI
+	private MapCube selectedMapCube; // 当前选择的炮塔所在的cube，选择炮塔会显示或隐藏升级UI
 	public Text moneyText; // 显示金钱的文本
 	public Animator moneyAnimator; // 金钱动画状态机
 	private int money = 1000; // 金钱
 	public GameObject upgradeCanvas; // 升级炮塔的画布UI
 	public Button upgradeButton; // 升级按钮
+	public Animator upgradeCanvasAnimator; // 炮塔升级画布的状态机
 	
 	// 金钱发生变化
 	void ChangeMoney(int change)
@@ -52,7 +53,7 @@ public class BuildManager : MonoBehaviour {
 							// 金钱数量变化
 							ChangeMoney(-selectedTurretData.cost);
 							// 创建炮塔
-							mapCube.BuildTurret(selectedTurretData.turretPrefab);
+							mapCube.BuildTurret(selectedTurretData);
 						}
 						else 
 						{
@@ -62,18 +63,18 @@ public class BuildManager : MonoBehaviour {
 					}
 					else if (mapCube.turretGo != null)
 					{
-						if (mapCube.turretGo == selectedTurretGo && upgradeCanvas.activeInHierarchy)
+						if (mapCube == selectedMapCube && upgradeCanvas.activeInHierarchy)
 						{
 							// 选择的是同一个炮塔，并且炮塔上已经显示了升级UI
-							HideUpgradeUI();
+							StartCoroutine(HideUpgradeUI());
 						}
-						else 
+						else
 						{
 							// 已经有了炮塔，传递炮塔位置和是否已经升级 
 							ShowUpgradeUI(mapCube.transform.position, mapCube.isUpgraded);
 						}
 						// 记录当前选择的炮塔
-						selectedTurretGo = mapCube.turretGo;
+						selectedMapCube = mapCube;
 					}
 				}
 			}
@@ -110,6 +111,11 @@ public class BuildManager : MonoBehaviour {
 	// 显示炮塔升级UI
 	void ShowUpgradeUI(Vector3 position, bool isDisableUpgrade)
 	{
+		// 停止上个隐藏动画
+		StopCoroutine(HideUpgradeUI());
+		// 每次激活都先禁用，这样动画才能正常显示
+		upgradeCanvas.SetActive(false);
+
 		// 激活炮塔升级UI
 		upgradeCanvas.SetActive(true);
 		// upgradeCanvas全场就只有一个对象，每次显示的时候都给他设置位置。
@@ -119,8 +125,11 @@ public class BuildManager : MonoBehaviour {
 	}
 
 	// 隐藏炮塔升级UI
-	void HideUpgradeUI()
+	IEnumerator HideUpgradeUI()
 	{
+		upgradeCanvasAnimator.SetTrigger("Hide");
+		// 0.5秒后禁用UI
+		yield return new WaitForSeconds(0.5f);
 		// 隐藏炮塔升级UI
 		upgradeCanvas.SetActive(false);
 	}
@@ -128,13 +137,30 @@ public class BuildManager : MonoBehaviour {
 	// 点击了升级按钮
 	public void OnUpgradeButtonDown()
 	{
-
+		// 如果点击的cube下没有炮塔，则可以创建
+		if (money > selectedTurretData.costUpgraded)
+		{
+			// 金钱数量变化
+			ChangeMoney(-selectedTurretData.costUpgraded);
+			// 对cube上的炮塔进行升级
+			selectedMapCube.UpgradeTurret();
+			// 隐藏UI
+			StartCoroutine(HideUpgradeUI());
+		}
+		else 
+		{
+			// TODO钱不够，给一个提示
+			moneyAnimator.SetTrigger("Flicker");
+		}
 	}
-
+	
 	// 点击了拆除按钮
 	public void OnDestroyButtonDown()
 	{
-
+		// 拆除cube上的炮塔
+		selectedMapCube.DestroyTurret();
+		// 隐藏UI
+		StartCoroutine(HideUpgradeUI());
 	}
 
 }

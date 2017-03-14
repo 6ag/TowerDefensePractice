@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour {
 	public float speed = 40; // 子弹发射速度
 	public GameObject explosionEffectPrefab; // 子弹碰到敌人的爆炸效果预制体
 	private Transform target; // 攻击目标
-
+	
 	// 实例化子弹后需要给定攻击目标
 	public void SetTarget(Transform target)
 	{

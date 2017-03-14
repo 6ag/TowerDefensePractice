@@ -6,12 +6,15 @@ using UnityEngine;
 public class Turret : MonoBehaviour {
 
 	// 在攻击范围内的敌人
-	public List<GameObject> enemies = new List<GameObject>();
+	private List<GameObject> enemies = new List<GameObject>();
 	public float attackRateTime = 1.0f; // 攻击间隔
 	private float timer = 0; // 计时器
 	public GameObject bulletPrefab; // 子弹预制体
 	public Transform firePosition; // 炮塔发射口位置
 	public Transform head; // 炮塔头部
+	public bool isUseLaser = false; // 是否使用激光炮塔
+	public float damageRate = 70; // 激光炮塔攻击伤害 1秒70伤害
+	public LineRenderer laserRenderer; // 激光渲染器
 	
 	void Start()
 	{
@@ -29,15 +32,49 @@ public class Turret : MonoBehaviour {
 			targetPosition.y = head.position.y;
 			head.LookAt(targetPosition);
 		}
-		// 计时器递增
-		timer += Time.deltaTime;
-		// 有存在的地方，并且计时器大于攻击间隔就重置，并调用攻击方法
-		if (enemies.Count > 0 && timer >= attackRateTime)
+
+		// 是否是激光炮塔
+		if (isUseLaser)
 		{
-			// 定时器清空
-			timer = 0;
-			Attack();
+			if (enemies.Count > 0)
+			{
+				// 如果目标已经被杀死或者已经到达终点，则移除集合
+				if (enemies[0] == null)
+				{
+					UpdateEnemys();
+				}
+				// 清理了空元素后，再次判断是否还有敌人能够被攻击
+				if (enemies.Count > 0)
+				{
+					if (laserRenderer.enabled == false)
+					{
+						laserRenderer.enabled = true;
+					}
+					// 激光攻击目标
+					laserRenderer.SetPositions(new Vector3[]{firePosition.position, enemies[0].transform.position});
+				}
+				else
+				{
+					// 可以攻击状态
+					laserRenderer.enabled = false;
+				}
+			}
+			
 		}
+		else 
+		{
+			// 普通炮塔，计时器递增
+			timer += Time.deltaTime;
+			// 有存在的地方，并且计时器大于攻击间隔就重置，并调用攻击方法
+			if (enemies.Count > 0 && timer >= attackRateTime)
+			{
+				// 定时器清空
+				timer = 0;
+				Attack();
+			}
+		}
+
+		
 	}
 
 	// 进入攻击范围
