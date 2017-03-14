@@ -6,8 +6,8 @@ using UnityEngine.UI;
 // 一个Enemy就是一个敌人
 public class Enemy : MonoBehaviour {
 
-	private int totalHp; // 保存总血量，用于计算血条进度。因为hp会递减
-	public int hp = 150; // 敌人血量
+	private float totalHp; // 保存总血量，用于计算血条进度。因为hp会递减
+	public float hp = 150; // 敌人血量
 	public Slider hpSlider; // 血条
 	public float speed = 10; // 移动速度
 	public GameObject explosionEffectPrefab; // 敌人死亡爆炸特效
@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	// 受到伤害
-	public void TakeDamage(int damage)
+	public void TakeDamage(float damage)
 	{
 		if (hp <= 0)
 		{
@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour {
 		}
 		// 血量减少，更新UI
 		hp -= damage;
-		hpSlider.value = (float)hp / totalHp;
+		hpSlider.value = hp / totalHp;
 		if (hp <= 0)
 		{
 			Die();

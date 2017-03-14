@@ -48,7 +48,7 @@ public class BuildManager : MonoBehaviour {
 					if (selectedTurretData != null && mapCube.turretGo == null)
 					{
 						// 如果点击的cube下没有炮塔，则可以创建
-						if (money > selectedTurretData.cost)
+						if (money >= selectedTurretData.cost)
 						{
 							// 金钱数量变化
 							ChangeMoney(-selectedTurretData.cost);
@@ -138,7 +138,7 @@ public class BuildManager : MonoBehaviour {
 	public void OnUpgradeButtonDown()
 	{
 		// 如果点击的cube下没有炮塔，则可以创建
-		if (money > selectedTurretData.costUpgraded)
+		if (money >= selectedTurretData.costUpgraded)
 		{
 			// 金钱数量变化
 			ChangeMoney(-selectedTurretData.costUpgraded);

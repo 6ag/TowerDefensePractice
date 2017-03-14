@@ -15,6 +15,7 @@ public class Turret : MonoBehaviour {
 	public bool isUseLaser = false; // 是否使用激光炮塔
 	public float damageRate = 70; // 激光炮塔攻击伤害 1秒70伤害
 	public LineRenderer laserRenderer; // 激光渲染器
+	public GameObject laserEffect; // 激光攻击特效
 	
 	void Start()
 	{
@@ -49,15 +50,21 @@ public class Turret : MonoBehaviour {
 					if (laserRenderer.enabled == false)
 					{
 						laserRenderer.enabled = true;
+						laserEffect.SetActive(true);
 					}
 					// 激光攻击目标
 					laserRenderer.SetPositions(new Vector3[]{firePosition.position, enemies[0].transform.position});
+					laserEffect.transform.position = enemies[0].transform.position;
+					laserEffect.transform.LookAt(new Vector3(transform.position.x, enemies[0].transform.position.y, transform.position.z));
+					// 造成持续伤害
+					enemies[0].GetComponent<Enemy>().TakeDamage(damageRate * Time.deltaTime);
 				}
-				else
-				{
-					// 可以攻击状态
-					laserRenderer.enabled = false;
-				}
+			}
+			else
+			{
+				// 可以攻击状态
+				laserRenderer.enabled = false;
+				laserEffect.SetActive(false);
 			}
 			
 		}
@@ -74,7 +81,6 @@ public class Turret : MonoBehaviour {
 			}
 		}
 
-		
 	}
 
 	// 进入攻击范围
