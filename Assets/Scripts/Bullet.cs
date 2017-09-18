@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 子弹AI - 实例化出来就去攻击敌人
 public class Bullet : MonoBehaviour {
 
 	public int damage = 50; // 子弹伤害
@@ -18,17 +17,19 @@ public class Bullet : MonoBehaviour {
 
 	void Update() 
 	{
-		// 当目标到达终点，或者目标被杀死。则子弹销毁
-		if (target == null)
-		{
-			// 销毁子弹
-			Die();
-			return;
-		}
-		// 子弹指向攻击目标
-		transform.LookAt(target.position);
-		// 向攻击目标发射
-		transform.Translate(Vector3.forward * Time.deltaTime * speed);
+        if ((target == null) || (target.gameObject.activeInHierarchy == false))
+        {
+            Die();
+            return;
+        }
+        else
+        {
+
+            // 子弹指向攻击目标
+            transform.LookAt(target.position);
+            // 向攻击目标发射
+            transform.Translate(Vector3.forward * Time.deltaTime * speed);
+        }
 	}
 
 	// 子弹碰撞检测
@@ -46,11 +47,8 @@ public class Bullet : MonoBehaviour {
 
 	void Die()
 	{
-		// 爆炸效果
 		GameObject effect = GameObject.Instantiate(explosionEffectPrefab, transform.position, transform.rotation);
-		// 销毁特效
 		Destroy(effect, 1);
-		// 销毁子弹
 		Destroy(gameObject);
 	}
 

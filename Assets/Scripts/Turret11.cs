@@ -29,7 +29,6 @@ public class Turret : MonoBehaviour {
 		if (enemies.Count > 0 && enemies[0] != null)
 		{
 			Vector3 targetPosition = enemies[0].transform.position;
-			// 让炮塔高度保持不变
 			targetPosition.y = head.position.y;
 			head.LookAt(targetPosition);
 		}
@@ -37,6 +36,7 @@ public class Turret : MonoBehaviour {
 		// 是否是激光炮塔
 		if (isUseLaser)
 		{
+			Debug.Log ("piu piu  " + gameObject.name + "\n");
 			if (enemies.Count > 0)
 			{
 				// 如果目标已经被杀死或者已经到达终点，则移除集合
@@ -68,14 +68,18 @@ public class Turret : MonoBehaviour {
 			}
 			
 		}
+
+
 		else 
 		{
+			
 			// 普通炮塔，计时器递增
 			timer += Time.deltaTime;
 			// 有存在的地方，并且计时器大于攻击间隔就重置，并调用攻击方法
 			if (enemies.Count > 0 && timer >= attackRateTime)
 			{
 				// 定时器清空
+				Debug.Log ("pou pou  " + gameObject.name + "\n");
 				timer = 0;
 				Attack();
 			}
@@ -86,7 +90,6 @@ public class Turret : MonoBehaviour {
 	// 进入攻击范围
 	void OnTriggerEnter(Collider other)
 	{
-		// 敌人进入攻击范围，加入集合
 		if (other.tag == "Enemy")
 		{
 			enemies.Add(other.gameObject);
@@ -106,22 +109,17 @@ public class Turret : MonoBehaviour {
 	// 攻击敌人
 	void Attack()
 	{
-		// 如果目标已经被杀死或者已经到达终点，则移除集合
 		if (enemies[0] == null)
 		{
 			UpdateEnemys();
 		}
-		// 清理了空元素后，再次判断是否还有敌人能够被攻击
 		if (enemies.Count > 0)
 		{
-			// 实例化子弹，子弹位置和方向于炮塔枪口一致
 			GameObject bullet = GameObject.Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
-			// 给子弹设置攻击目标
 			bullet.GetComponent<Bullet>().SetTarget(enemies[0].transform);
 		}
 		else
 		{
-			// 可以攻击状态
 			timer = attackRateTime;
 		}
 		

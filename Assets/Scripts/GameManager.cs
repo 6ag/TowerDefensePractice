@@ -10,11 +10,13 @@ public class GameManager : MonoBehaviour {
 	public Text endMessage; // 游戏结束提示信息
 	public static GameManager instance;
 	private EnemySpawner enemySpawner; // 敌人孵化器
-
+    public BulletPrototype bulletPrototype;
+    public GameObject missile, bullet;
 	void Awake()
 	{
 		instance = this;
 		enemySpawner = GetComponent<EnemySpawner>();
+        bulletPrototype = new BulletPrototype(bullet,missile);
 	}
 
 	public void Win()
